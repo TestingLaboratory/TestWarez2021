@@ -1,0 +1,26 @@
+scrape_configs:
+    # The job name assigned to scraped metrics by default.
+    - job_name: monitoring
+      static_configs:
+          - targets: ['localhost:9090']
+    - job_name: 'blackbox'
+      # The HTTP resource path on which to fetch metrics from targets
+      metrics_path: /probe
+      # Configures the protocol scheme used for requests.
+      scheme: http
+      # Optional HTTP URL parameters
+      params:
+          module: [http_2xx]
+      # List of file service discovery configurations
+      file_sd_configs:
+          - files:
+                - targets.yml
+      # List of target relabel configurations
+      relabel_configs:
+          - source_labels: [__address__]
+            target_label: __param_target
+          - source_labels: [__param_target]
+            target_label: instance
+          - target_label: __address__
+            replacement: blackbox:9115
+
