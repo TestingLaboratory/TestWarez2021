@@ -1,6 +1,6 @@
 FROM python
 
-WORKDIR /restful-booker-collector
+WORKDIR /custom_collector_package
 
 COPY requirements.txt .
 
@@ -10,6 +10,6 @@ RUN pip install -r requirements.txt
 
 COPY custom_collector_package/ .
 
-CMD ["python", "./restful_booker_collector.py"]
+CMD ["python", "booker_collector.py"]
 
 EXPOSE 9099
