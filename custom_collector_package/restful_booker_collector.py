@@ -1,15 +1,32 @@
 from prometheus_client import start_http_server
 from prometheus_client.core import GaugeMetricFamily, REGISTRY
 import time
-from custom_collector_package.smoke_test import *
+import requests
+
+
+# from custom_collector_package.smoke_test import *
+
+def check_login():
+    authentication_url = 'https://restful-booker.herokuapp.com/auth'
+    payload = "{\n    \"username\" : \"admin\",\n    \"password\" : \"password123\"\n}"
+    headers = {
+        'Content-Type': 'application/json'
+    }
+    response = requests.post(authentication_url, headers=headers,
+                             data=payload)
+    json_res = response.json()
+    access_token = json_res['token']
+    return access_token
+
+
+def check_bookings():
+    bookings_url = 'https://restful-booker.herokuapp.com/bookings'
+    booking_response = requests.get(bookings_url, headers={'Content-Type': 'application/json'})
+    bookings = booking_response.status_code
+    return bookings
 
 
 class RestfulCustomBookerCollector(object):
-    # def __init__(self, c_base_url):
-    #     self.base_url = c_base_url
-    #     self.authentication_url = f"{c_base_url}/auth"
-    #     self.get_bookings_url = f"{c_base_url}/bookings"
-
     def collect(self):
         access_token = check_login()
         is_token_retrieved = 0
