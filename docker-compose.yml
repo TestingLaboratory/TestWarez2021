@@ -31,8 +31,11 @@ services:
     user: '472'
     networks:
       - monitor-net
+    volumes:
+      - grafana-storage:/var/lib/grafana
   custom-rest-api:
-    image: custom-rest-api-collector
+#    image: custom-rest-api-collector
+    container_name: rest_collector
     build:
       context: .
       dockerfile: rest_custom_collector.dockerfile
@@ -40,3 +43,18 @@ services:
       - "9099:9099"
     networks:
       - monitor-net
+  alertmanager:
+    image: prom/alertmanager
+    container_name: alertmanager
+    volumes:
+      - ./prometheus:/prometheus
+    command:
+      - '--config.file=/prometheus/alertmanager.yml'
+    ports:
+      - 9093:9093
+    networks:
+      - monitor-net
+
+volumes:
+  grafana-storage:
+    driver: local

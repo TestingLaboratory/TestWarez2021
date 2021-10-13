@@ -53,5 +53,5 @@ class RestfulCustomBookerCollector(object):
 if __name__ == "__main__":
     REGISTRY.register(RestfulCustomBookerCollector())
     start_http_server(9099)
-    while True:
-        time.sleep(1)
+    # while True:
+    #     time.sleep(1)
