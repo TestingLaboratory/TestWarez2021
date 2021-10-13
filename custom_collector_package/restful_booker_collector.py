@@ -2,6 +2,10 @@ import requests
 from prometheus_client import start_http_server
 from prometheus_client.core import GaugeMetricFamily, REGISTRY
 
+__headers = {
+    'Content-Type': 'application/json'
+}
+
 
 def check_login():
     authentication_url = 'https://restful-booker.herokuapp.com/auth'
@@ -10,12 +14,8 @@ def check_login():
         "password": "password123"
     }
 
-    headers = {
-        'Content-Type': 'application/json'
-    }
-
     response = requests.post(authentication_url,
-                             headers=headers,
+                             headers=__headers,
                              data=payload)
     json_res = response.json()
     access_token = json_res['token']
